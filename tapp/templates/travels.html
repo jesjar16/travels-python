@@ -44,10 +44,10 @@
             <table class="ms-5 table table-striped table-hover">
                 <thead>
                     <tr>
+                        <th scope="col">Name</th>
                         <th scope="col">Destination</th>
                         <th scope="col">Travel Start Date</th>
                         <th scope="col">Travel End Date</th>
-                        <th scope="col">Plan</th>
                         <th scope="col">Do You Want to Join</th>
                     </tr>
                 </thead>
@@ -57,7 +57,7 @@
                             <th scope="row">{{ trip.planned_by.name }}</th>
                             <td><a href="{% url 'my_destination' trip_id=trip.id %}">{{ trip.destination }}</a></th>
                             <td>{{ trip.travel_date_from|date:"M d Y" }}</td>
-                            <td><a href="#">{{ trip.travel_date_to|date:"M d Y" }}</a></th>
+                            <td>{{ trip.travel_date_to|date:"M d Y" }}</th>
                             <td><a href="{% url 'my_join' trip_id=trip.id %}">Join</a></th>    
                         </tr>
                     {% endfor %}
