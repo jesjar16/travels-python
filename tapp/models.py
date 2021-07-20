@@ -72,6 +72,8 @@ class User(models.Model):
 
     def __repr__(self):
         return f"User: (ID: {self.id}) -> {self.name} {self.username}"
+
+# new models for travel app
     
 class TripManager(models.Manager):
     def basic_validator(self, postData):
@@ -120,97 +122,4 @@ class Trip(models.Model):
     objects = TripManager()
 
     def __repr__(self):
-        return f"Trip: (ID: {self.id}) -> {self.description}"    
-    
-# new models for dojo reads app
-'''
-class AuthorManager(models.Manager):
-    def basic_validator(self, postData):
-
-        # errors dictionnary
-        errors = {}
-        
-        # checking author
-        if len(postData['author']) == 0 and postData['author_lst'] == '-':
-            errors['author_emp'] = "Please select an author from the list or add a new one"
-            
-        if len(postData['author']) != 0 and postData['author_lst'] != '-':
-            errors['author_mul'] = "Please either select an author from the list or add a new one, but not both"            
-                    
-        return errors
-
-class Author(models.Model):
-    name = models.CharField(max_length=255)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    # books = a list of books associated with a given author
-    objects = AuthorManager()
-
-    def __repr__(self):
-        return f"Author: (ID: {self.id}) -> {self.title}"
-
-class BookManager(models.Manager):
-    def basic_validator(self, postData):
-
-        # errors dictionnary
-        errors = {}
-        
-        # checking first name
-        if len(postData['title']) == 0:
-            errors['title_emp'] = "Title can not be empty"
-            
-        if len(postData['title']) < 2:
-            errors['title_len'] = "Title must be at least 2 characters"            
-                    
-        return errors
-        
-class Book(models.Model):
-    title = models.CharField(max_length=255)
-    user = models.ForeignKey(User, related_name="reviewed", on_delete=models.CASCADE) # the user who reviewed a given book
-    users = models.ManyToManyField(User, related_name="user_books") # a list of users who have reviewed a given book
-    author = models.ForeignKey(Author, related_name="books", on_delete=models.CASCADE) # the user who reviewed a given book
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    # review_detail = a review for a given user
-    objects = BookManager()
-
-    def __repr__(self):
-        return f"Book: (ID: {self.id}) -> {self.title}"    
-
-class ReviewManager(models.Manager):
-    def basic_validator(self, postData):
-
-        # errors dictionnary
-        errors = {}
-        
-        # checking review
-        if len(postData['review']) == 0:
-            errors['review_emp'] = "Review can not be empty"
-            
-        if len(postData['review']) < 10:
-            errors['review_len'] = "Review must be at least 10 characters"            
-            
-        # checking rating
-        if len(postData['rating']) == 0:
-            errors['rating_emp'] = "Rating can not be empty"
-            
-        if postData['rating'] < "1" or postData['rating'] > "5":
-            errors['rating_ran'] = "Rating must be between 1 and 5"
-                    
-        return errors
-        
-class Review(models.Model):
-    review = models.TextField()
-    rating = models.IntegerField()
-    user = models.ForeignKey(User, related_name="review", on_delete=models.CASCADE) # the user who reviewed a given book
-    book = models.ForeignKey(Book, related_name="review_detail", on_delete=models.CASCADE) # the book which got a review
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    objects = ReviewManager()
-
-    def __repr__(self):
-        return f"Review: (ID: {self.id}) -> {self.review}"    
-    
-'''
-
-# new models for travel app
+        return f"Trip: (ID: {self.id}) -> {self.description}"

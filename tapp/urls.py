@@ -12,13 +12,6 @@ urlpatterns = [
     path('create/', views.create, name="my_create"),
     path('join/<int:trip_id>/', views.join, name="my_join"),
     path('destination/<int:trip_id>/', views.destination, name="my_destination"),
-    #path('book_review/', views.book_review, name="my_book_review"),
-    #path('add_breview/', views.add_breview, name="my_add_breview"),
-    #path('del_breview/', views.del_breview, name="my_del_breview"),
-    #path('add_sm_review/', views.add_sm_review, name="my_add_sm_review"),
-    #path('add/', views.add, name="my_add"),
-    #path('users/<int:user_id>/', views.users, name="my_users"),
-    #path('book/<int:book_id>/', views.book, name="my_book"),
     path('about/', views.about, name="my_about"),
     path('logout/', views.logout, name="my_logout"),
 ]

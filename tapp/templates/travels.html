@@ -7,30 +7,34 @@
     
     <div class="row py-3 ps-5">
         <h3>Welcome, {{ request.session.user_data.name }} ({{ request.session.user_data.username }})!</h3>
-        <h5 class="text-success pt-3">Your Trip Schedules</h5>
+        <h5 class="text-success pt-3 ps-4">Your Trip Schedules</h5>
     </div>
     {% if all_user_trips %}
-        <div class="row bg-light">
-            <table class="ms-5 table table-striped table-hover">
-                <thead>
-                    <tr>
-                    <th scope="col">Destination</th>
-                    <th scope="col">Travel Start Date</th>
-                    <th scope="col">Travel End Date</th>
-                    <th scope="col">Plan</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for trip in all_user_trips%}
-                        <tr>
-                            <td><a href="#">{{ trip.destination }}</a></th>
-                            <td>{{ trip.travel_date_from }}</td>
-                            <td>{{ trip.travel_date_to }}</td>
-                            <td>{{ trip.description }}</td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-                </table>
+        <div class=" container">
+            <div class="row bg-light">
+                <div class="col-8">
+                    <table class="ms-5 table table-striped table-hover">
+                        <thead>
+                            <tr>
+                            <th scope="col">Destination</th>
+                            <th scope="col">Travel Start Date</th>
+                            <th scope="col">Travel End Date</th>
+                            <th scope="col">Plan</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for trip in all_user_trips%}
+                                <tr>
+                                    <td><a href="{% url 'my_destination' trip_id=trip.id %}">{{ trip.destination }}</a></th>
+                                    <td>{{ trip.travel_date_from }}</td>
+                                    <td>{{ trip.travel_date_to }}</td>
+                                    <td>{{ trip.description }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     {% else %}
         <div class="row py-3 ps-5">
@@ -38,31 +42,36 @@
         </div>
     {% endif %}
 
-    <h5 class="text-success pt-3 mt-4">Other User's Travel Plans</h5>
+    
     {% if other_users_trips %}
-        <div class="row bg-light">
-            <table class="ms-5 table table-striped table-hover">
-                <thead>
-                    <tr>
-                        <th scope="col">Name</th>
-                        <th scope="col">Destination</th>
-                        <th scope="col">Travel Start Date</th>
-                        <th scope="col">Travel End Date</th>
-                        <th scope="col">Do You Want to Join</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for trip in other_users_trips %}
-                        <tr>
-                            <th scope="row">{{ trip.planned_by.name }}</th>
-                            <td><a href="{% url 'my_destination' trip_id=trip.id %}">{{ trip.destination }}</a></th>
-                            <td>{{ trip.travel_date_from|date:"M d Y" }}</td>
-                            <td>{{ trip.travel_date_to|date:"M d Y" }}</th>
-                            <td><a href="{% url 'my_join' trip_id=trip.id %}">Join</a></th>    
-                        </tr>
-                    {% endfor %}
-                </tbody>
-                </table>
+        <div class=" container">
+            <div class="row bg-light">
+                <div class="col-10">
+                    <h5 class="text-success pt-3 mt-4 ps-5 pb-3">Other User's Travel Plans</h5>
+                    <table class="ms-5 table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th scope="col">Name</th>
+                                <th scope="col">Destination</th>
+                                <th scope="col">Travel Start Date</th>
+                                <th scope="col">Travel End Date</th>
+                                <th scope="col">Do You Want to Join</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for trip in other_users_trips %}
+                                <tr>
+                                    <th scope="row">{{ trip.planned_by.name }}</th>
+                                    <td><a href="{% url 'my_destination' trip_id=trip.id %}">{{ trip.destination }}</a></th>
+                                    <td>{{ trip.travel_date_from|date:"M d Y" }}</td>
+                                    <td>{{ trip.travel_date_to|date:"M d Y" }}</th>
+                                    <td><a href="{% url 'my_join' trip_id=trip.id %}">Join</a></th>    
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                        </table>
+                </div>
+            </div>
         </div>
     {% else %}
         <div class="row py-3 ps-5">

@@ -142,8 +142,16 @@ def join(request, trip_id):
     # getting trip
     this_trip = Trip.objects.get(id=trip_id)
     
-    # adding user to trip
-    this_user.joiners.add(this_trip)
+    # checking if user is already joining the trip
+    # getting all joiners
+    joiners = this_trip.user_who_join.all()
+    
+    for user in joiners:
+        if user == this_user:
+            messages.error(request, "User is already joining this trip!")
+    else: # user still not joining the trip    
+        # adding user to trip
+        this_user.joiners.add(this_trip)
     
     return redirect(reverse("my_travels"))
 
@@ -232,133 +240,6 @@ def create(request):
 
         #return redirect(reverse("my_book_review"))
         return redirect(reverse("my_travels"))
-
-@login_required    
-def book_review(request):
-    first_3_reviews = Review.objects.all().order_by('-id').annotate(Avg('rating'))[:3:1]
-    rest_of_reviews = Review.objects.all().order_by('-id')[3:]
-    
-    print(first_3_reviews)
-    
-    context= {
-        'first_3_reviews': first_3_reviews,
-        'rest_of_reviews': rest_of_reviews
-    }
-    return render(request, "book_review_home.html", context)
-
-@login_required    
-def add_breview(request):
-    # getting all authors to populate author select
-    all_authors = Author.objects.all()
-    
-    context = {
-        'all_authors': all_authors
-    }
-    
-    return render(request, "add_breview.html", context)
-
-
-
-@login_required  
-def add_sm_review(request):
-    # getting form variables
-    review = request.POST['review']
-    rating = request.POST['rating']
-    book_id = request.POST['book_id']    
-    
-    # errors dict is received
-    errors = Review.objects.basic_validator(request.POST)
-    
-    ''' THIS PART VALIDATES IF USER HAS ALREADY REVIEWED THE BOOK, AND PREVENTS THEM FOR REVIEWING AGAIN
-    # chequing if current user has already posted a review
-    id = request.session['user_data']['user_id']
-    this_user = User.objects.get(id=id)
-    
-    this_book = Book.objects.get(id=book_id)
-    reviewed_by_this_user = Review.objects.filter(user=this_user).filter(book=this_book)
-    
-    if reviewed_by_this_user:
-        errors['reviewed'] = "You have already reviewed this book!"
-    
-    '''
-    # if there are errors
-    if len(errors) > 0:                
-        for key, value in errors.items():
-            messages.error(request, value)
-
-        form_data = {
-            'review': review,
-            'rating': rating
-        } 
-        
-        request.session['form_data'] = form_data
-
-        return redirect(reverse("my_book", args=(book_id,)))
-    else: # no errors
-        id = request.session['user_data']['user_id']
-        this_user = User.objects.get(id=id)
-        
-        this_book = Book.objects.get(id=book_id)
-        
-        # saves review
-        this_review = Review.objects.create(review=review, rating=rating, user=this_user, book=this_book)        
-        
-        messages.success(request, "Review successfully added")
-        
-        if 'form_data' in request.session:
-            del request.session['form_data']
-
-        return redirect(reverse("my_book", args=(book_id,)))
-    
-@login_required      
-def users(request, user_id):
-    this_user = User.objects.get(id=user_id)
-    
-    # getting all reviews by the current user, order descending
-    user_reviews = Review.objects.filter(user=this_user).order_by('-id')
-    
-    # getting the amount of reviews by current user
-    total_reviews = Review.objects.filter(user=this_user).count()
-        
-    context = {
-        'user_reviews': user_reviews,
-        'total_reviews': total_reviews,
-        'this_user': this_user
-    }
-    
-    return render(request, "book_user.html", context)
-
-@login_required    
-def book(request, book_id):
-    id = request.session['user_data']['user_id']
-    this_user = User.objects.get(id=id)
-    
-    # getting current book
-    this_book = Book.objects.get(id=book_id)
-    
-    # getting all reviews for book
-    all_book_reviews = Review.objects.filter(book=this_book).order_by('-id')
-    
-    context = {
-        'this_book': this_book,
-        'all_book_reviews': all_book_reviews,
-        'this_user': this_user
-    }
-    return render(request, "book.html", context)    
-
-@login_required    
-def del_breview(request):
-    # getting form variables
-    reviewId = request.POST['reviewId']
-    book_id = request.POST['book_id']
-    
-    # creating review object to delete
-    review_to_delete = Review.objects.get(id=reviewId)
-    
-    # deleting review
-    review_to_delete.delete()
-    
-    return redirect(reverse("my_book", args=(book_id,)))
 
 @login_required
 def about(request):
