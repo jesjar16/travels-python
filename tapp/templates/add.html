@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block title %}Add Plan{% endblock %}
+
+{% block content %}
+    {% include "menu.html" %}
+    <div class="row">
+        <div class="row py-3 ps-5">
+            <h3>Welcome, {{ request.session.user_data.name }} ({{ request.session.user_data.username }})!</h3>
+            <hr>
+            <!-- Add a Trip, left side-->
+            <div class="col-6 pt-3 pb-5">
+                <div class="row pb-4">
+                    <h4>Add a Trip</h4>
+                </div>
+                <form id="trip_form" name="trip_form" action="{% url 'my_create' %}" method="POST">
+                    {% csrf_token %}
+                    <div class="row mb-3">
+                        <div class="col-4">
+                            <label for="destination" class="form-label"><h6>Destination:</h6></label>
+                        </div>
+                        <div class="col-8">
+                            <input type="text" class="form-control" id="destination" name="destination" value="{{ request.session.form_data.destination }}">
+                        </div>
+                    </div>      
+                    <div class="row mb-3">
+                        <div class="col-4">
+                            <label for="description" class="form-label"><h6>Description:</h6></label>
+                        </div>
+                        <div class="col-8">
+                            <input type="text" class="form-control" id="description" name="description" value="{{ request.session.form_data.description }}">
+                        </div>
+                    </div>  
+                    <div class="row mb-3">
+                        <div class="col-4">
+                            <label for="date_from" class="form-label"><h6>Travel Date From:</h6></label>
+                        </div>
+                        <div class="col-8">
+                            <input type="date" class="form-control" id="date_from" name="date_from" value="{{ request.session.form_data.date_from }}">
+                        </div>
+                    </div>  
+                    <div class="row mb-3">
+                        <div class="col-4">
+                            <label for="date_to" class="form-label"><h6>Travel Date To:</h6></label>
+                        </div>
+                        <div class="col-8">
+                            <input type="date" class="form-control" id="date_to" name="date_to" value="{{ request.session.form_data.date_to }}">
+                        </div>
+                    </div> 
+                    <div class="row mt-4 text-end">
+                        <div class="col-8 offset-4">
+                            <button type="submit" class="btn btn-dark">Add</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            
+        </div>
+    </div>
+{% endblock %}    

@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}Destination{% endblock %}
+
+{% block content %}
+    {% include "menu.html" %}
+    <div class="row">
+        <div class="row py-3 ps-5">
+            <div class="col-10">
+                <h3>Welcome, {{ request.session.user_data.name }} ({{ request.session.user_data.username }})!</h3>
+            </div>
+        </div>
+        <div class="row py-3 ps-5">
+            <h3>{{ this_trip.destination }}</h3>
+            <h5>Planned By: {{ this_trip.planned_by.name }}</h5>
+            <h5>Description: {{ this_trip.description }}</h5>
+            <h5>Travel Date From: {{ this_trip.travel_date_from|date:"M d Y" }}</h5>
+            <h5>Travel Date To: {{ this_trip.travel_date_to|date:"M d Y" }}</h5>
+        </div>
+        <div class="row py-3 ps-5">
+            <h4>Other user's joining the trip:</h3>
+            {% if joiners_except_planner %}
+                {% for joiner in joiners_except_planner %}
+                    <h5>{{ joiner.name }}</h5>
+                {% endfor %}
+            {% else %}
+                <h5>There's no other users currently joining the trip</h5>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}    
