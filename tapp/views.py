@@ -120,11 +120,10 @@ def travels(request):
     this_user = User.objects.get(id=id)
     
     # all user's trip
-    #all_user_trips = Trip.objects.filter(planned_by=this_user)
-    all_user_trips = this_user.joiners.all()
+    all_user_trips = this_user.joiners.all().order_by('travel_date_from')
     
     # other user's trips
-    other_users_trips = Trip.objects.exclude(planned_by=this_user)
+    other_users_trips = Trip.objects.exclude(user_who_join=this_user).order_by('travel_date_from')
     
     context = {
         'all_user_trips': all_user_trips,

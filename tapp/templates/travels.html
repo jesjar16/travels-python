@@ -26,8 +26,8 @@
                             {% for trip in all_user_trips%}
                                 <tr>
                                     <td><a href="{% url 'my_destination' trip_id=trip.id %}">{{ trip.destination }}</a></th>
-                                    <td>{{ trip.travel_date_from }}</td>
-                                    <td>{{ trip.travel_date_to }}</td>
+                                    <td>{{ trip.travel_date_from|date:"M d Y" }}</td>
+                                    <td>{{ trip.travel_date_to|date:"M d Y" }}</td>
                                     <td>{{ trip.description }}</td>
                                 </tr>
                             {% endfor %}
