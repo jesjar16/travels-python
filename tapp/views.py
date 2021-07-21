@@ -6,6 +6,7 @@ import bcrypt
 from django.db import IntegrityError
 from tapp.decorators import login_required
 from django.db.models import Avg # to calculate average
+import itertools
 
 # Create your views here.
 def index(request):
@@ -165,26 +166,22 @@ def destination(request, trip_id):
     # getting user
     id = request.session['user_data']['user_id']
     this_user = User.objects.get(id=id)
-    
+
     # getting planner
     this_planner = this_trip.planned_by
-    print ("Planner", this_planner)
+    print('this_planner ', this_planner)
     
+    # getting all trips by this planner
+    all_trips_by_this_planner = Trip.objects.filter(planned_by=this_planner)
     
-    # getting all joiners
-    joiners = this_trip.user_who_join.all()
+    # getting all travellers for this trip
+    all_trip_travellers = this_trip.user_who_join.all()
+    print("all_trip_travellers ",all_trip_travellers)
     
-    print("Joiners, but planner ",joiners)
-    
-    #joiners = Trip.objects.get(id=trip_id)
-    joiners_except_planner = []
-    
-    for user in joiners:
-        if user != this_planner:
-            joiners_except_planner.append(user)
-            
-    print ("All but planner", joiners_except_planner)
-    
+    # getting all travelers, except the one who planned the trip
+    joiners_except_planner = this_trip.user_who_join.all().exclude(planner__in=all_trips_by_this_planner).order_by('name')
+    print ('joiners_except_planner ',joiners_except_planner)
+        
     context = {
         'this_trip': this_trip,
         'joiners_except_planner': joiners_except_planner

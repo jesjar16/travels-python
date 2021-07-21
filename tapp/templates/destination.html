@@ -23,11 +23,11 @@
         <div class="row py-3 ps-5 mb-3">
             <h4>Other user's joining the trip:</h3>
             {% if joiners_except_planner %}
-                {% for joiner in joiners_except_planner %}
-                    <div class="col-6 ps-5">
+                <div class="col-6 ps-5">
+                    {% for joiner in joiners_except_planner %}
                         <h5>{{ joiner.name }}</h5>
-                    </div>
-                {% endfor %}
+                    {% endfor %}
+                </div>
             {% else %}
                 <div class="col-6 ps-5">
                     <h5>There's no other users currently joining the trip</h5>
