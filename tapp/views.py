@@ -120,11 +120,11 @@ def travels(request):
     this_user = User.objects.get(id=id)
     
     # all user's trip
-    all_user_trips = Trip.objects.filter(planned_by=this_user)
+    #all_user_trips = Trip.objects.filter(planned_by=this_user)
+    all_user_trips = this_user.joiners.all()
     
     # other user's trips
     other_users_trips = Trip.objects.exclude(planned_by=this_user)
-    print (other_users_trips)
     
     context = {
         'all_user_trips': all_user_trips,
@@ -152,6 +152,9 @@ def join(request, trip_id):
     else: # user still not joining the trip    
         # adding user to trip
         this_user.joiners.add(this_trip)
+        
+        # creating success message
+        messages.success(request, "You have joined this trip!")
     
     return redirect(reverse("my_travels"))
 
