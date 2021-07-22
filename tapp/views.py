@@ -37,26 +37,39 @@ def register(request):
         
         return redirect(reverse("my_index"))
     else:
-        # hashing password
-        hashed_password = bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode()
-        
-        # creating the user
-        this_user = User.objects.create(name=name, username=username, password=hashed_password) 
-
-        # creating dictionary with user's data
-        user_data = {
-                'user_id': this_user.id,
-                'name': this_user.name.capitalize(),
-                'username': this_user.username,
-                'action': 'register'
-        }
-        
-        # saving user dictionary to session variable
-        request.session['user_data'] = user_data
+        try:
+            # hashing password
+            hashed_password = bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode()
             
-        messages.success(request, "User successfully created and logged in")
-    
-        return redirect(reverse("my_success"))
+            # creating the user
+            this_user = User.objects.create(name=name, username=username, password=hashed_password) 
+
+            # creating dictionary with user's data
+            user_data = {
+                    'user_id': this_user.id,
+                    'name': this_user.name.capitalize(),
+                    'username': this_user.username,
+                    'action': 'register'
+            }
+            
+            # saving user dictionary to session variable
+            request.session['user_data'] = user_data
+                
+            messages.success(request, "User successfully created and logged in")
+        
+            return redirect(reverse("my_success"))
+        except IntegrityError as e:
+            if 'UNIQUE constraint' in str(e.args):
+                messages.error(request, 'Username is already registered, try logging in')
+                
+                form_data = {
+                    'name': name,
+                    'username': username
+                }
+                
+                request.session['form_data'] = form_data
+
+            return redirect(reverse("my_index"))
         
 def login(request):
     # form variables are received
